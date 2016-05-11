@@ -4,21 +4,27 @@ import com.teamtreehouse.model.Player;
 import com.teamtreehouse.model.Players;
 import com.teamtreehouse.model.Team;
 
-public class Prompter {
+import java.util.ArrayList;
+import java.util.List;
+
+public class League {
+    Player[] mPlayers;
+    List<Team> mTeams = new ArrayList<Team>();
     Console console = System.console();
 
-    public Prompter() {
+    public League(Player[] players) {
+        mPlayers = players;
     }
 
-    public void promptLeague() {
+    public void organizeLeague() {
         console.printf("%nSOCCER LEAGUE ORGANIZER%n");
         console.printf("-----------------------%n");
         promptForOption();
     }
 
     private void displayMenu() {
-        console.printf("1). Add A Team%n" +
-                "2). Option 2%n" +
+        console.printf("1). Add team to the league%n" +
+                "2). Add player to team%n" +
                 "3). Option 3%n" +
                 "4). Quit%n");
     }
@@ -30,7 +36,13 @@ public class Prompter {
             choice = Integer.parseInt(console.readLine("%nChoose an option: "));
             switch (choice) {
                 case 1:
-                    Team team = promptForTeam();
+                    if (mPlayers.length >= 11) {
+                        Team team = promptForTeam();
+                        mTeams.add(team);
+                    } else {
+                        console.printf("There are not enough players for a new team.%n" +
+                                "Please choose another option.%n");
+                    }
                     break;
                 case 2:
                     break;
