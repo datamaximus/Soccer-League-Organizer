@@ -1,6 +1,5 @@
 import java.io.Console;
 
-import com.teamtreehouse.model.League;
 import com.teamtreehouse.model.Player;
 import com.teamtreehouse.model.Players;
 import com.teamtreehouse.model.Team;
@@ -31,7 +30,7 @@ public class Prompter {
             choice = Integer.parseInt(console.readLine("%nChoose an option: "));
             switch (choice) {
                 case 1:
-                    Team team = new Team("Manchester United", "Louis Van Gaal");
+                    Team team = promptForTeam();
                     break;
                 case 2:
                     break;
@@ -42,5 +41,11 @@ public class Prompter {
                     break;
             }
         }
+    }
+
+    public Team promptForTeam() {
+        String teamName = console.readLine("Enter team name: ");
+        String coachName = console.readLine("Enter coach name: ");
+        return new Team(teamName, coachName);
     }
 }
