@@ -4,16 +4,19 @@ import com.teamtreehouse.model.Player;
 import com.teamtreehouse.model.Players;
 import com.teamtreehouse.model.Team;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class League {
-    Player[] mPlayers;
-    List<Team> mTeams = new ArrayList<Team>();
+    Set<Player> mPlayers;
+    Set<Team> mTeams = new TreeSet<Team>();
     Console console = System.console();
 
     public League(Player[] players) {
-        mPlayers = players;
+        mPlayers= new TreeSet(Arrays.asList(players));
     }
 
     public void organizeLeague() {
@@ -23,9 +26,9 @@ public class League {
     }
 
     private void displayMenu() {
-        console.printf("1). Add team to the league%n" +
+        console.printf("%n1). Add team to the league%n" +
                 "2). Add player to team%n" +
-                "3). Option 3%n" +
+                "3). Remove player from team%n" +
                 "4). Quit%n");
     }
 
@@ -36,15 +39,47 @@ public class League {
             choice = Integer.parseInt(console.readLine("%nChoose an option: "));
             switch (choice) {
                 case 1:
-                    if (mPlayers.length >= 11) {
+                    if (mPlayers.size() - mTeams.size()*11 >= 11) {
                         Team team = promptForTeam();
                         mTeams.add(team);
+                        console.printf("%nNew team added to the league!%n%n");
                     } else {
                         console.printf("There are not enough players for a new team.%n" +
                                 "Please choose another option.%n");
                     }
                     break;
                 case 2:
+                    int selection;
+                    Team chosenTeam;
+                    Player chosenPlayer;
+                    //Display list of teams to choose from
+                    int count = 1;
+                    console.printf("%n");
+                    for (Team team : mTeams) {
+                        console.printf("%d). %s%n", count, team.mName);
+                        count++;
+                    }
+                    //Choose existing team
+                    selection = Integer.parseInt(console.readLine("%nChoose a team from the above list to add player: "));
+                    List listOfTeams = new ArrayList(mTeams);
+                    chosenTeam = (Team)listOfTeams.get(selection-1);
+                    //Display available players
+                    count = 1;
+                    for (Player player : mPlayers) {
+                        console.printf("%d). %s %s%n    Height: %d%n    Experienced: %b%n%n",
+                                count, player.getFirstName(), player.getLastName(),
+                                player.getHeightInInches(), player.isPreviousExperience());
+                        count++;
+                    }
+                    //Choose player
+                    selection = Integer.parseInt(console.readLine("%nChoose a player to add from the above list: "));
+                    List listOfPlayers = new ArrayList(mPlayers);
+                    chosenPlayer = (Player)listOfPlayers.get(selection-1);
+                    //Add player to team
+                    chosenTeam.addPlayer(chosenPlayer);
+                    //Remove player from available players
+                    mPlayers.remove(chosenPlayer);
+                    console.printf("%s added to %s%n", chosenPlayer.getFirstName(), chosenTeam.mName);
                     break;
                 case 3:
                     break;
