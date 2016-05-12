@@ -18,6 +18,10 @@ public class Team implements Comparable<Team> {
         mPlayers.add(player);
     }
 
+    public void removePlayer(Player player) {
+        mPlayers.remove(player);
+    }
+
     @Override
     public int compareTo(Team t) {
         return mName.compareTo(t.mName);
