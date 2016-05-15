@@ -27,7 +27,15 @@ public class League {
     public void organizeLeague() {
         console.printf("%nSOCCER LEAGUE ORGANIZER%n");
         console.printf("-----------------------%n");
-        promptForOption();
+        try {
+            promptForOption();
+        } catch (IndexOutOfBoundsException ioobe) {
+            System.out.println("That was not a valid entry");
+            ioobe.printStackTrace();
+        } catch (NumberFormatException nfe) {
+            System.out.println("That was not a valid entry");
+            nfe.printStackTrace();
+        }
     }
 
     private void displayMenu() {
@@ -49,16 +57,20 @@ public class League {
                 case "1":
                     if (mMaxNewTeams > 0) {
                         Team team = promptForTeam();
-                        mTeams.add(team);
-                        mMaxNewTeams--;
-                        console.printf("%nNew team added to the league!%n");
+                        if (!mTeams.contains(team)) {
+                            mTeams.add(team);
+                            mMaxNewTeams--;
+                            console.printf("%nNew team added to the league!%n");
+                        } else {
+                            console.printf("%n%s has already been added to the league%n", team.mName);
+                        }
                     } else {
                         console.printf("There are not enough players for a new team.%n" +
                                 "Please choose another option.%n");
                     }
                     break;
                 case "2":
-                    if (mTeams.isEmpty()) {
+                    if (noTeams()) {
                         console.printf("%nCannot add player. Please add a team first.%n");
                     } else if (mPlayers.isEmpty()) {
                         console.printf("%nCannot add player. No more available players.%n");
@@ -73,7 +85,7 @@ public class League {
                     }
                     break;
                 case "3":
-                    if (mTeams.isEmpty()) {
+                    if (noTeams()) {
                         console.printf("%nCannot remove player. All rosters are empty.%n");
                     } else {
                         chosenTeam = chooseTeam();
@@ -88,16 +100,27 @@ public class League {
                     }
                     break;
                 case "4":
-                    chosenTeam = chooseTeam();
-                    displayHeightReport(chosenTeam);
-                    ;
+                    if (noTeams()) {
+                        console.printf("%nCannot print report. League has no teams.%n");
+                    } else {
+                        chosenTeam = chooseTeam();
+                        displayHeightReport(chosenTeam);
+                    }
                     break;
                 case "5":
-                    displayExperienceReport();
+                    if (noTeams()) {
+                        console.printf("%nCannot print report. League has no teams.%n");
+                    } else {
+                        displayExperienceReport();
+                    }
                     break;
                 case "6":
-                    chosenTeam = chooseTeam();
-                    chosenTeam.displayRoster();
+                    if (noTeams()) {
+                        console.printf("%nCannot print report. League has no teams.%n");
+                    } else {
+                        chosenTeam = chooseTeam();
+                        chosenTeam.displayRoster();
+                    }
                     break;
                 case "7":
                     choice = "7";
@@ -114,7 +137,7 @@ public class League {
         return new Team(teamName, coachName);
     }
 
-    public Team chooseTeam() {
+    public Team chooseTeam() throws IndexOutOfBoundsException, NumberFormatException {
         //Display list of teams to choose from
         int selection;
         int count = 1;
@@ -124,12 +147,12 @@ public class League {
             count++;
         }
         //Choose existing team
-        selection = Integer.parseInt(console.readLine("%nChoose a team from the above list: "));
+        selection = Integer.parseInt(console.readLine("%nChoose a team (number) from the above list: "));
         List<Team> listOfTeams = new ArrayList<Team>(mTeams);
         return (Team) listOfTeams.get(selection - 1);
     }
 
-    public Player choosePlayer(boolean toAdd) {
+    public Player choosePlayer(boolean toAdd) throws IndexOutOfBoundsException, NumberFormatException {
         //Display available players
         Set<Player> playerSet = new TreeSet<>();
         int selection;
@@ -146,19 +169,23 @@ public class League {
             count++;
         }
         //Choose player
-        selection = Integer.parseInt(console.readLine("%nChoose a player from the above list: "));
+        selection = Integer.parseInt(console.readLine("%nChoose a player (number) from the above list: "));
         List<Player> listOfPlayers = new ArrayList<Player>(playerSet);
         return (Player) listOfPlayers.get(selection - 1);
     }
 
     public void displayHeightReport(Team team) {
+        int count = 0;
         Map<Integer, List<Player>>  heightReport = team.byHeight();
         for (Map.Entry<Integer, List<Player>> entry : heightReport.entrySet()) {
             console.printf("%nHeight: %d%n" +
                     "----------%n", entry.getKey());
             for (Player player : entry.getValue()) {
                 console.printf("%s %s%n", player.getFirstName(), player.getLastName());
+                count++;
             }
+            console.printf("Total of %d players at height: %d%n", count, entry.getKey());
+            count = 0;
         }
     }
 
@@ -172,6 +199,14 @@ public class League {
             }
             float experiencedPercentage = 100 * (experiencedPlayers.get("Experienced")/(float)team.mPlayers.size());
             console.printf("Percentage of players with experience: %.1f%n", experiencedPercentage);
+        }
+    }
+
+    public boolean noTeams() {
+        if (mTeams.isEmpty()) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
