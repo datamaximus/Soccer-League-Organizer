@@ -30,10 +30,10 @@ public class League {
         try {
             promptForOption();
         } catch (IndexOutOfBoundsException ioobe) {
-            System.out.println("That was not a valid entry");
+            System.out.println("*** That was not a valid entry ***");
             ioobe.printStackTrace();
         } catch (NumberFormatException nfe) {
-            System.out.println("That was not a valid entry");
+            System.out.println("*** That was not a valid entry ***");
             nfe.printStackTrace();
         }
     }
@@ -62,18 +62,18 @@ public class League {
                             mMaxNewTeams--;
                             console.printf("%nNew team added to the league!%n");
                         } else {
-                            console.printf("%n%s has already been added to the league%n", team.mName);
+                            console.printf("%n*** %s has already been added to the league ***%n", team.mName);
                         }
                     } else {
-                        console.printf("There are not enough players for a new team.%n" +
-                                "Please choose another option.%n");
+                        console.printf("*** There are not enough players for a new team. ***%n" +
+                                "*** Please choose another option. ***%n");
                     }
                     break;
                 case "2":
                     if (noTeams()) {
-                        console.printf("%nCannot add player. Please add a team first.%n");
+                        console.printf("%n*** Cannot add player. Please add a team first. ***%n");
                     } else if (mPlayers.isEmpty()) {
-                        console.printf("%nCannot add player. No more available players.%n");
+                        console.printf("%n*** Cannot add player. No more available players. ***%n");
                     } else {
                         chosenTeam = chooseTeam();
                         chosenPlayer = choosePlayer(true);
@@ -86,11 +86,11 @@ public class League {
                     break;
                 case "3":
                     if (noTeams()) {
-                        console.printf("%nCannot remove player. All rosters are empty.%n");
+                        console.printf("%n*** Cannot remove player. All rosters are empty. ***%n");
                     } else {
                         chosenTeam = chooseTeam();
                         if (chosenTeam.mPlayers.isEmpty()) {
-                            console.printf("%nCannot remove player. Team roster is empty.%n");
+                            console.printf("%n*** Cannot remove player. Team roster is empty. ***%n");
                         } else {
                             chosenPlayer = choosePlayer(false);
                             mPlayers.add(chosenPlayer);
@@ -101,7 +101,7 @@ public class League {
                     break;
                 case "4":
                     if (noTeams()) {
-                        console.printf("%nCannot print report. League has no teams.%n");
+                        console.printf("%n*** Cannot print report. League has no teams. ***%n");
                     } else {
                         chosenTeam = chooseTeam();
                         displayHeightReport(chosenTeam);
@@ -109,14 +109,14 @@ public class League {
                     break;
                 case "5":
                     if (noTeams()) {
-                        console.printf("%nCannot print report. League has no teams.%n");
+                        console.printf("%n*** Cannot print report. League has no teams. ***%n");
                     } else {
                         displayExperienceReport();
                     }
                     break;
                 case "6":
                     if (noTeams()) {
-                        console.printf("%nCannot print report. League has no teams.%n");
+                        console.printf("%n*** Cannot print report. League has no teams. ***%n");
                     } else {
                         chosenTeam = chooseTeam();
                         chosenTeam.displayRoster();
@@ -126,7 +126,7 @@ public class League {
                     choice = "7";
                     break;
                 default:
-                    console.printf("Unknown choice:  '%s'. Try again.  %n", choice);
+                    console.printf("*** Unknown choice:  '%s'. Try again. ***%n", choice);
             }
         }
     }
