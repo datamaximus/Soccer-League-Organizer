@@ -41,12 +41,12 @@ public class League {
     }
 
     public void promptForOption() {
-        int choice = 0;
-        while (choice != 7) {
+        String choice = "";
+        while (!choice.equals("7")) {
             displayMenu();
-            choice = Integer.parseInt(console.readLine("%nChoose an option: "));
+            choice = console.readLine("%nChoose an option: ");
             switch (choice) {
-                case 1:
+                case "1":
                     if (mMaxNewTeams > 0) {
                         Team team = promptForTeam();
                         mTeams.add(team);
@@ -57,37 +57,53 @@ public class League {
                                 "Please choose another option.%n");
                     }
                     break;
-                case 2:
-                    chosenTeam = chooseTeam();
-                    chosenPlayer = choosePlayer(true);
-                    //Add player to team
-                    chosenTeam.addPlayer(chosenPlayer);
-                    //Remove player from available players
-                    mPlayers.remove(chosenPlayer);
-                    console.printf("%n%s added to %s%n", chosenPlayer.getFirstName(), chosenTeam.mName);
+                case "2":
+                    if (mTeams.isEmpty()) {
+                        console.printf("%nCannot add player. Please add a team first.%n");
+                    } else if (mPlayers.isEmpty()) {
+                        console.printf("%nCannot add player. No more available players.%n");
+                    } else {
+                        chosenTeam = chooseTeam();
+                        chosenPlayer = choosePlayer(true);
+                        //Add player to team
+                        chosenTeam.addPlayer(chosenPlayer);
+                        //Remove player from available players
+                        mPlayers.remove(chosenPlayer);
+                        console.printf("%n%s added to %s%n", chosenPlayer.getFirstName(), chosenTeam.mName);
+                    }
                     break;
-                case 3:
-                    chosenTeam = chooseTeam();
-                    chosenPlayer = choosePlayer(false);
-                    mPlayers.add(chosenPlayer);
-                    chosenTeam.removePlayer(chosenPlayer);
-                    console.printf("%n%s removed to %s%n", chosenPlayer.getFirstName(), chosenTeam.mName);
+                case "3":
+                    if (mTeams.isEmpty()) {
+                        console.printf("%nCannot remove player. All rosters are empty.%n");
+                    } else {
+                        chosenTeam = chooseTeam();
+                        if (chosenTeam.mPlayers.isEmpty()) {
+                            console.printf("%nCannot remove player. Team roster is empty.%n");
+                        } else {
+                            chosenPlayer = choosePlayer(false);
+                            mPlayers.add(chosenPlayer);
+                            chosenTeam.removePlayer(chosenPlayer);
+                            console.printf("%n%s removed to %s%n", chosenPlayer.getFirstName(), chosenTeam.mName);
+                        }
+                    }
                     break;
-                case 4:
+                case "4":
                     chosenTeam = chooseTeam();
                     displayHeightReport(chosenTeam);
                     ;
                     break;
-                case 5:
+                case "5":
                     displayExperienceReport();
                     break;
-                case 6:
+                case "6":
                     chosenTeam = chooseTeam();
                     chosenTeam.displayRoster();
                     break;
-                case 7:
-                    choice = 7;
+                case "7":
+                    choice = "7";
                     break;
+                default:
+                    console.printf("Unknown choice:  '%s'. Try again.  %n", choice);
             }
         }
     }
