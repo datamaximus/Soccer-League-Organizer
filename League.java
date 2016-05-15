@@ -21,7 +21,7 @@ public class League {
 
     public League(Player[] players) {
         mPlayers = new TreeSet(Arrays.asList(players));
-        mMaxNewTeams = mPlayers.size()/11;
+        mMaxNewTeams = mPlayers.size() / 11;
     }
 
     public void organizeLeague() {
@@ -176,7 +176,7 @@ public class League {
 
     public void displayHeightReport(Team team) {
         int count = 0;
-        Map<Integer, List<Player>>  heightReport = team.byHeight();
+        Map<Integer, List<Player>> heightReport = team.byHeight();
         for (Map.Entry<Integer, List<Player>> entry : heightReport.entrySet()) {
             console.printf("%nHeight: %d%n" +
                     "----------%n", entry.getKey());
@@ -197,7 +197,7 @@ public class League {
             for (Map.Entry<String, Integer> entry : experiencedPlayers.entrySet()) {
                 console.printf("%s: %d%n", entry.getKey(), entry.getValue());
             }
-            float experiencedPercentage = 100 * (experiencedPlayers.get("Experienced")/(float)team.mPlayers.size());
+            float experiencedPercentage = 100 * (experiencedPlayers.get("Experienced") / (float) team.mPlayers.size());
             console.printf("Percentage of players with experience: %.1f%n", experiencedPercentage);
         }
     }
